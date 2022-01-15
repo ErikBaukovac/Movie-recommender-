@@ -1,0 +1,102 @@
+<html>
+
+<head>
+    <title>Movie recommender</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Movie recommender">
+    <meta name="author" content="Erik Baukovac">
+    <style>
+        ul {
+            list-style-type: none;
+            padding-left: 0px;
+        }
+        
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+        
+        #directors {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        form {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Create relationship</h1>
+
+    </header>
+    <nav>
+        <a href="index.ejs">Main page</a>
+        <a href="#movies">Movies</a>
+        <a href="#directors">Directors</a>
+    </nav>
+
+    <section id="movies">
+        <h2>Movies</h2>
+        <ul>
+            <% movies.forEach(function(movie){ %>
+                <li>
+                    <%='Title: ' +  movie.title %>
+                </li>
+                <% }); %>
+        </ul>
+        <br>
+        <form method="POST" action="/movie/add">
+            <label for="movieTitle">Title:</label>
+            <input type="text" name="movieTitle"><br>
+            <label for="movieRelease">Release year:</label>
+            <input type="number" name="movieRelease" min="1975" max="2022"><br>
+            <label for="movieGenre">Genre:</label>
+            <input type="text" name="movieGenre"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <section id="directors">
+        <h2>Directors</h2>
+        <ul>
+            <% directors.forEach(function(director){ %>
+                <li>
+                    <%= 'Name: ' + director.name %>
+                        <%= director.surname %>
+                            <%= 'Born: ' + director.born %>
+                </li>
+                <% }); %>
+        </ul>
+        <br>
+        <form method="POST" action="/director/add">
+            <label for="directorName">Name:</label>
+            <input type="text" name="directorName"><br>
+            <label for="directorSurname">Surname:</label>
+            <input type="text" name="directorSurname"><br>
+            <label for="directorBorn"> Born year:</label>
+            <input type="number" name="directorBorn" min="1930" max="2002"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+    <footer>
+        <p>Autor: Erik Baukovac</p>
+        <p>&copy; 2021 E.Baukovac</p>
+    </footer>
+</body>
+
+</html>

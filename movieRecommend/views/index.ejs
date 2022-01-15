@@ -1,0 +1,259 @@
+<html>
+
+<head>
+    <title>Movie recommender</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Movie recommender">
+    <meta name="author" content="Erik Baukovac">
+    <style>
+        h1,
+        h2 {
+            color: white;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: BLACK;
+        }
+        
+        table,
+        th,
+        tr,
+        td {
+            border-collapse: collapse;
+            border: solid 2px white;
+            color: white;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        label {
+            color: white;
+        }
+        
+        form {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        section {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Movie recommender</h1>
+
+    </header>
+    <nav>
+        <a href="#movies">Movies</a>
+        <a href="#directors">Directors</a>
+        <a href="#recommend">Recommend</a>
+        <% if(undirected.length > 0) {%>
+            <a href="#createRelation">Create relations</a>
+            <% } %>
+    </nav>
+
+    <section id="movies">
+        <h2>Movies</h2>
+        <table>
+            <tr>
+                <th>Title</th>
+            </tr>
+            <% movies.forEach(function(movie){ %>
+                <tr>
+                    <td>
+                        <%=movie.title %>
+                    </td>
+                </tr>
+                <% }); %>
+
+        </table>
+        <br>
+        <form method="POST" action="/movie/add">
+            <label for="movieTitle">Title:</label>
+            <input type="text" name="movieTitle"><br>
+            <label for="movieRelease">Release year:</label>
+            <input type="number" name="movieRelease" min="1975" max="2022"><br>
+            <label for="movieGenre">Genre:</label>
+            <input type="text" name="movieGenre"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <section id="directors">
+        <h2>Directors</h2>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Born</th>
+            </tr>
+            <% directors.forEach(function(director){ %>
+                <tr>
+                    <td>
+                        <%=director.name %>
+
+                    </td>
+                    <td>
+                        <%=director.surname %>
+                    </td>
+                    <td>
+                        <%=director.born %>
+                    </td>
+                </tr>
+                <% }); %>
+        </table>
+        <br>
+        <form method="POST" action="/director/add">
+            <label for="directorName">Name:</label>
+            <input type="text" name="directorName"><br>
+            <label for="directorSurname">Surname:</label>
+            <input type="text" name="directorSurname"><br>
+            <label for="directorBorn"> Born year:</label>
+            <input type="number" name="directorBorn" min="1930" max="2002"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <section id="createRelation">
+        <% if(undirected.length > 0) {%>
+            <h2>Movies without director</h2>
+
+            <table>
+                <tr>
+                    <th>Title</th>
+                </tr>
+                <% undirected.forEach(function(movie){ %>
+                    <tr>
+                        <td>
+                            <%=movie.title %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </table>
+
+            <br>
+            <form method="POST" action="/directing/add">
+                <label for="directorName">Name:</label>
+                <input type="text" name="directorName"><br>
+                <label for="movieTitle">Title:</label>
+                <input type="text" name="movieTitle"><br>
+
+                <input type="submit" value="Submit">
+            </form>
+            <% } %>
+    </section>
+
+    <section id=review>
+        <h2>Give review</h2>
+
+        <form method="POST" action="/review/add">
+            <label for="userName">Your name:</label>
+            <input type="text" name="userName"><br>
+            <label for="userSurname">Your surname:</label>
+            <input type="text" name="userSurname"><br>
+            <label for="movieTitle">Movie:</label>
+            <input type="text" name="movieTitle"><br>
+            <label for="rating">Rating:</label>
+            <input type="number" name="rating"><br>
+            <label for="comment">Comment:</label>
+            <input type="text" name="comment"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <section id="recommend">
+        <h2>Recommender</h2>
+        <form method="POST" action="/recommend/add">
+            <label for="userName">Your name:</label>
+            <input type="text" name="userName"><br>
+            <label for="userSurname">Your surname:</label>
+            <input type="text" name="userSurname"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+
+        <h2>Recommender per genre</h2>
+        <form method="POST" action="/recommend/add">
+            <label for="genre">Your favorite genre:</label>
+            <input type="text" name="genre"><br>
+
+
+            <input type="submit" value="Submit">
+        </form>
+
+
+        <% if(typeof recommendation !== 'undefined' && recommendation.length > 0) {%>
+
+            <h2>Your recommended movies</h2>
+
+
+            <table>
+                <tr>
+                    <th>Title</th>
+                </tr>
+                <% recommendation.forEach(function(movie){ %>
+
+                    <tr>
+                        <td>
+                            <%=movie.movieTitle %>
+                        </td>
+                    </tr>
+                    <% }); %>
+
+            </table>
+            <br>
+            <% } %>
+
+                <% if(typeof recommendationGenre !== 'undefined' && recommendationGenre.length > 0) {%>
+
+                    <h2>Your recommended movies</h2>
+
+
+                    <table>
+                        <tr>
+                            <th>Title</th>
+                        </tr>
+                        <% recommendationGenre.forEach(function(movie){ %>
+
+                            <tr>
+                                <td>
+                                    <%=movie.movieTitle %>
+                                </td>
+                            </tr>
+                            <% }); %>
+
+                    </table>
+                    <br>
+                    <% } %>
+
+
+
+    </section>
+    <footer>
+        <p>Autor: Erik Baukovac</p>
+        <p>&copy; 2021 E.Baukovac</p>
+    </footer>
+</body>
+
+</html>
